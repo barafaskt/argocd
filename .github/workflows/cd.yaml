@@ -8,18 +8,18 @@ jobs:
   # trabalho de build imagem
   build: 
     # nome do nosso build
-    name: build
+    name: Build
     # no ambiente vamos usar o ubuntu
     runs-on: ubuntu-latest
 
-    # seguir passos a passos
+    # seguir passo a passo
     steps:
       # baixar nosso repositório
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       # fazer o build da imagem docker e subir no docker hub
-      - name: build image and push
+      - name: Build image and push
         # action desenvolvida pela docker
         uses: docker/build-push-action@v1.1.0
         with:
@@ -32,3 +32,56 @@ jobs:
           # versões, tags que vamos fazer
           # pegar o sha do github + a versão latest
           tags: ${{ github.sha }}, latest
+  
+  # trabalho de deploy
+  deploy: 
+    # nome do nosso deploy
+    name: Deploy
+    # no ambiente vamos usar o ubuntu
+    runs-on: ubuntu-latest
+    # depende do trabalho: 'build'
+    # só roda esse job depois que o job buid rodar
+    needs: build
+    # seguir passo a passo
+    steps:
+      # baixar nosso repositório
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      # Vai instalar o kustomize nessa máquina ubuntu
+      # Rodar o kustomize nessa máquina ubuntu e gerar um novo arquivo kustomization
+      - name: Kustomize
+        uses: imranismail/setup-kustomize@v1
+        with:
+          kustomize_version: v3.6.1
+
+      # update do kubernetes
+      - name: Update k8s
+        # rodar os seguintes comandos:
+        # 1º acessa pasta k8s do repositorio
+        # 2º executa o kustomize alterando o arquivo de configuração kustomization.yaml
+        #   alterando o valor da tag image anterior para outra imagem docker
+        # 3º exibe o arquivo kustomization.yaml 
+        run: |
+          cd k8s
+          kustomize edit set image goapp=barafaskt/argocd:${{ github.sha }}
+          cat kustomization.yaml
+      
+      # commit dentro do próprio repositório
+      - name: Commit
+         # rodar os seguintes comandos:
+         # 1º/2º O git com um novo usuário local
+         # 3º Commita e adiciona ao mesmo tempo
+        run: |
+          git config --local user.email "acton@github.com"
+          git config --local user.name "Deploy Action"
+          git commit -am "change image tag"
+        
+        # push do repositório local para o repositório remoto
+      - name: Push
+        uses: ad-m/github-push-action@master
+        
+
+
+        
+      
