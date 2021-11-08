@@ -1,0 +1,34 @@
+name: CD
+
+on: 
+  push:
+    branches: [main]
+
+jobs:
+  # trabalho de build imagem
+  build: 
+    # nome do nosso build
+    name: build
+    # no ambiente vamos usar o ubuntu
+    runs-on: ubuntu-latest
+
+    # seguir passos a passos
+    steps:
+      # baixar nosso repositório
+      - name: checkout
+        uses: actions/checkout@v2
+
+      # fazer o build da imagem docker e subir no docker hub
+      - name: build image and push
+        # action desenvolvida pela docker
+        uses: docker/build-push-action@v1.1.0
+        with:
+          # usuário e senha do docker hub
+          username: barafaskt
+          # password em formato de secret através do docker hub
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          # repositório que vamos subir
+          repository: barafaskt/argocd
+          # versões, tags que vamos fazer
+          # pegar o sha do github + a versão latest
+          tags: ${{ github.sha }}, latest

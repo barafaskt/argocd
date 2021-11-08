@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: goapp
+spec:
+ selector:
+   matchLabels:
+     app: goapp
+ replicas: 3
+ template:
+   metadata:
+     labels:
+       app: goapp
+   spec:
+    containers:
+    - name: goapp
+      # image: barafaskt/argocd:v1 #v1
+      # image: barafaskt/argocd:latest #latest
+      image: goapp
+      ports:
+      # - containerPort: 8919 #v1
+      - containerPort: 8087 #latest
