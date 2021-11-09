@@ -11,5 +11,5 @@ namespace: goapp
 # imagens que vamos utilizar
 images:
 - name: goapp
-  newName: goapp
-  newTag: latest
+  newName: barafaskt/argocd
+  newTag: fff6ce944b1291bb5837dc200866dec4c0bf318c
