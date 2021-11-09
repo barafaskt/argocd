@@ -1,4 +1,5 @@
 # Kustomize recurso do kubernetes que ajuda a customizar os manifestos em tempo real
+<<<<<<< HEAD
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -7,15 +8,24 @@ resources:
 - deployment.yaml
 - service.yaml
 
+=======
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+>>>>>>> 33f70ed0bcbe68556013462ac0b2a9def72e1d5c
 # tudo que for configurado serão aplicados
 # nos resources definidos(deployment.yaml, service.yaml)
-
+resources:
+- deployment.yaml
+- service.yaml
 # Exemplo de o deployment.yaml e service.yaml rode em um determinado namespace
+<<<<<<< HEAD
 namespace: goapp
 
+=======
+namespace: gooapp
+>>>>>>> 33f70ed0bcbe68556013462ac0b2a9def72e1d5c
 # imagens que vamos utilizar
 images:
-- name: goapp # nome da imagem
-  newName: goapp # caminho da imagem do register container docker
-  newTag: v1 # versão da imagem
-  # ? OBS: no deployment.yaml o image: não pode a tag da versão da imagem
+- name: goapp
+  newName: barafaskt/argocd
+  newTag: 55b70a349d2363564d45ac547d9859f077c3fcb7
