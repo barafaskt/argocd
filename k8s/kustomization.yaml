@@ -12,4 +12,4 @@ namespace: goapp
 images:
 - name: goapp
   newName: barafaskt/argocd
-  newTag: fff6ce944b1291bb5837dc200866dec4c0bf318c
+  newTag: 65c77cd4f863ecc01c78509ad3edfd94b21bafaf
